@@ -2,7 +2,7 @@
 
 Analytical and simulation model for computing tennis match win probabilities using Markov chains.
 
-Models the hierarchical structure of tennis scoring (points → games → sets → matches) with a single parameter `p`: the probability of winning any given point. Includes closed-form formulas for game and tiebreak probabilities, dynamic programming for set probabilities, and Monte Carlo simulation for validation.
+Models the hierarchical structure of tennis scoring (points → games → sets → matches) with a single parameter `p`. This parameter is the probability of winning any given point. Includes Monte Carlo Simulation for validation.
 
 ## Usage
 
