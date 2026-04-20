@@ -6,7 +6,6 @@ def build_table(p_values: List[float], best_of: int = 3) -> List[Tuple[float, fl
     """
     Build a probability table across several point win probabilities. Each row
     contains p, P(game), P(set), and P(match) for the given match format.
-    Used to produce the tables shown in the report.
     """
     return [(p, p_win_game(p), p_win_set(p), p_win_match(p, best_of)) for p in p_values]
 
@@ -23,10 +22,7 @@ def print_table(rows: List[Tuple], title: str = "") -> None:
 
 def derivative_at(p: float, best_of: int = 3, eps: float = 0.001) -> float:
     """
-    Estimate dP(match)/dp at a given value of p using a central difference.
-    Evaluates the match probability slightly above and below p, then divides
-    by 2 * eps. This captures how sensitive match outcomes are to small shifts
-    in point win probability, which drives the amplification finding in the
-    report.
+    Estimate dP(match)/dp at a given value of p using a central difference,
+    which captures how sensitive match outcomes are to small shifts in p.
     """
     return (p_win_match(p + eps, best_of) - p_win_match(p - eps, best_of)) / (2 * eps)

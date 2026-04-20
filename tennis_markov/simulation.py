@@ -8,17 +8,15 @@ def _point(p: float) -> int:
 
 def _game(p: float) -> int:
     """
-    Simulate a full game point by point. Returns 1 if the player wins the
-    game, 0 otherwise. Handles deuce automatically by requiring at least
-    4 points and a 2 point lead.
+    Simulate a full game point by point. Returns 1 if the player wins, 0
+    otherwise, enforcing the 2 point lead requirement for deuce.
     """
-    s, r = 0, 0  # s is the player's points, r is the opponent's.
+    s, r = 0, 0
     while True:
         if _point(p):
             s += 1
         else:
             r += 1
-        # Win condition: 4 or more points with a lead of at least 2.
         if s >= 4 and s - r >= 2:
             return 1
         if r >= 4 and r - s >= 2:
@@ -26,10 +24,7 @@ def _game(p: float) -> int:
 
 
 def _tiebreak(p: float) -> int:
-    """
-    Simulate a tiebreak point by point. Same idea as _game but first to
-    7 points wins, still requiring a 2 point margin.
-    """
+    """Simulate a tiebreak. First to 7 points with a 2 point margin wins."""
     s, r = 0, 0
     while True:
         if _point(p):
@@ -44,8 +39,8 @@ def _tiebreak(p: float) -> int:
 
 def _set(p: float) -> int:
     """
-    Simulate a set by simulating games one at a time until a player reaches
-    6 games with a 2 game lead, or until the set goes to a tiebreak at 6-6.
+    Simulate a set by simulating games until one side reaches 6 with a 2 game
+    lead, or until a tiebreak resolves a 6-6 score.
     """
     s, r = 0, 0
     while True:
@@ -53,21 +48,16 @@ def _set(p: float) -> int:
             s += 1
         else:
             r += 1
-        # Won outright anywhere from 6-0 through 7-5.
         if s >= 6 and s - r >= 2:
             return 1
         if r >= 6 and r - s >= 2:
             return 0
-        # At 6-6 the set goes to a tiebreak.
         if s == 6 and r == 6:
             return _tiebreak(p)
 
 
 def _match(p: float, best_of: int) -> int:
-    """
-    Simulate a best of N match by simulating sets until one side has won
-    the required number.
-    """
+    """Simulate a best of N match by simulating sets until one side clinches."""
     needed = (best_of + 1) // 2
     s, r = 0, 0
     while s < needed and r < needed:
@@ -81,8 +71,7 @@ def _match(p: float, best_of: int) -> int:
 def run_simulation(p: float, n_matches: int = 100_000, best_of: int = 3, seed: int = 42) -> float:
     """
     Run a Monte Carlo simulation of n_matches matches and return the fraction
-    won by the player. Used to sanity check the analytical results. The seed
-    keeps the output reproducible across runs.
+    won by the player. Seeded for reproducibility.
     """
     random.seed(seed)
     wins = sum(_match(p, best_of) for _ in range(n_matches))
